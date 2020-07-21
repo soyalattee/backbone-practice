@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <h1>Watch the console</h1>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+    <script>
+      var Todo = Backbone.Model.extend({
+        initialize: function () {
+          console.log("this model has been initialized.");
+        },
+        defaults: {
+          title: "",
+          completed: false,
+        },
+      });
+      // 속성 하나만 지정
+      var myTodo = new Todo({
+        title: "check attributes of the models in the console.",
+      });
+      //json 출력
+      console.log(JSON.stringify(myTodo));
+
+      //속성 둘다 지정
+      var todo2 = new Todo({
+        title: "난 이미 완료되었지롱",
+        completed: true,
+      });
+      console.log(JSON.stringify(todo2));
+      console.log(todo2.get("title") + "이 타이틀입니다");
+      var todo2Attributes = todo2.toJSON();
+      console.log(todo2Attributes); // {"title":"난 이미 완료되었지롱","completed":true}
+    </script>
+  </body>
+</html>
