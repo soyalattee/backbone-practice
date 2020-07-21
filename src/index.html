@@ -12,29 +12,49 @@
     <script>
       var Todo = Backbone.Model.extend({
         initialize: function () {
-          console.log("this model has been initialized.");
+          console.log("init! ");
+          this.on("invalid", function (model, error) {
+            console.log(error);
+          });
         },
         defaults: {
           title: "",
           completed: false,
         },
+        validate: function (attrs) {
+          //값의 유효성을 검증한다.
+          //validate에 등록해 놓은 함수에 return 값이 falsy value(false, undefined 등 false로 판단되는 값들)이 아니면 validate를 통과하고,
+          // 위의 true와 같은 truthy value(falsy value가 아닌 모든 값들, true, 문자열, 숫자 등)이 되면 validate를 통과하지 못해 model에 값이 설정되지 않습니다.
+          if (attrs.title === undefined) {
+            return "this one need title for todo";
+          }
+        },
       });
-      // 속성 하나만 지정
-      var myTodo = new Todo({
-        title: "check attributes of the models in the console.",
+      //set 사용하여 속성값 변경
+      var todo3 = new Todo({
+        title: "set 할 예정이에요",
+        completed: false,
       });
-      //json 출력
-      console.log(JSON.stringify(myTodo));
+      console.log("todo3 title: " + todo3.get("title"));
+      todo3.set("title", "set 했지요");
+      console.log("todo3 title: " + todo3.get("title"));
 
-      //속성 둘다 지정
-      var todo2 = new Todo({
-        title: "난 이미 완료되었지롱",
+      //속성맵을 변경할 경우 추가도 가능하다.
+      todo3.set({
+        title: "set 으로 속성변경",
         completed: true,
+        deleted: true,
       });
-      console.log(JSON.stringify(todo2));
-      console.log(todo2.get("title") + "이 타이틀입니다");
-      var todo2Attributes = todo2.toJSON();
-      console.log(todo2Attributes); // {"title":"난 이미 완료되었지롱","completed":true}
+      console.log("todo3 title: " + todo3.get("title"));
+      console.log("todo3 completed: " + todo3.get("completed"));
+      console.log("todo3 deleted: " + todo3.get("deleted"));
+
+      //validate 로 unset 막기
+      var myTodo = new Todo();
+      myTodo.set({ title: "myTodo" });
+      console.log(myTodo.get("title"));
+      myTodo.unset("title", { validate: true }); // validate true 면 잡힌거. 실행하지 못한다.
+      console.log(myTodo.get("title"));
     </script>
   </body>
 </html>

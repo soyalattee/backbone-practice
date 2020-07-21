@@ -4,10 +4,10 @@
 
 Live Server 와 Debugger for Chrome 이용하여 디버깅
 
-## 진행 목록 
+## 진행 상황 
 1. 기초 - 디자인 패턴과 Backbone.js 사용법
 2. 기본 - 모델 
-        - 뷰
+        - 뷰 
         - 컬렉션
         - 라우터
 3. Todo앱 만들기
