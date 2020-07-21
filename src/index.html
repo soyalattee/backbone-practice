@@ -84,15 +84,6 @@
 
       button1.trigger("click");
       button2.trigger("click"); // 출력 : <button class="button2"></button>
-
-      var ListView = Backbone.View.extend({
-        render: function () {
-          this.$el.html(this.model.toJSON());
-          return this; //서브뷰로 재사용 할 수 있도록 해줌
-        },
-      });
-
-      var listView = new ListView(myTodo);
     </script>
   </body>
 </html>
