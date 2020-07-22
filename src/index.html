@@ -5,10 +5,17 @@
     <title>Title</title>
   </head>
   <body>
-    <h1>Watch the console</h1>
+    <ul id="todos"></ul>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.0.1/mustache.js"></script>
+    <script type="text/x-mustache" id="item-template">
+      <div>
+        <input id="todo_complete" type="checkbox" {{#completed}}completed="checked"{{/completed}}>
+        {{title}}
+      </div>
+    </script>
     <script>
       //MODEL
       var Todo = Backbone.Model.extend({
@@ -20,7 +27,7 @@
         },
         defaults: {
           title: "",
-          completed: false,
+          completed: true,
         },
         validate: function (attrs) {
           //값의 유효성을 검증한다.
@@ -33,14 +40,13 @@
       });
 
       var myTodo = new Todo();
-      myTodo.set({ title: "myTodo" });
+      myTodo.set({ title: "제목 입니다" });
 
+      console.log(myTodo.toJSON());
       //VIEW : DOM 요소 만들기
       var TodoView = Backbone.View.extend({
         tagName: "li",
-
-        todoTpl: _.template("An example template"),
-
+        template: $("#item-template").html(), //template 해석
         events: {
           "dblclick label": "edit",
           "keypress .edit": "updateOnEnter",
@@ -48,7 +54,8 @@
         },
 
         render: function () {
-          this.$el.html(this.todoTpl(this.model.toJSON()));
+          var html = Mustache.render(this.template, this.model.toJSON());
+          this.$el.html(html);
           this.input = this.$(".edit");
           return this;
         },
@@ -63,27 +70,9 @@
         },
       });
 
-      var todoView = new TodoView();
-
-      //할당
-      var button1 = $('<button class="button1"></button>');
-      var button2 = $('<button class="button2"></button>');
-
-      var View = Backbone.View.extend({
-        events: {
-          click: function (e) {
-            console.log(e.target);
-          },
-        },
-      });
-
-      //새로운 View 인스턴스, button1을 할당한다.
-      var view = new View({ el: button1 });
-      //setElement를 이용해 신규 요소로 이벤트 이동
-      view.setElement(button2);
-
-      button1.trigger("click");
-      button2.trigger("click"); // 출력 : <button class="button2"></button>
+      var todoView = new TodoView({ model: myTodo });
+      console.log(todoView.render().el);
+      $("#todos").html(todoView.render().el);
     </script>
   </body>
 </html>
